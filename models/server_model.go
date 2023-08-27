@@ -19,7 +19,6 @@ type Server struct {
 }
 
 func NewServer(ip string, port string) *Server {
-
 	return &Server{Ip: ip, Port: port}
 }
 
@@ -27,16 +26,13 @@ func (s *Server) String() (str string) {
 	if s == nil {
 		return
 	}
-
 	str = fmt.Sprintf("%s:%s", s.Ip, s.Port)
-
 	return
 }
 
 func StringToServer(str string) (server *Server, err error) {
 	list := strings.Split(str, ":")
 	if len(list) != 2 {
-
 		return nil, errors.New("err")
 	}
 
@@ -44,6 +40,5 @@ func StringToServer(str string) (server *Server, err error) {
 		Ip:   list[0],
 		Port: list[1],
 	}
-
 	return
 }

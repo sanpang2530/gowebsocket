@@ -33,7 +33,9 @@ func SendMsgAll(server *models.Server, seq string, appId uint32, userId string, 
 
 		return
 	}
-	defer conn.Close()
+	defer func(conn *grpc.ClientConn) {
+		_ = conn.Close()
+	}(conn)
 
 	c := protobuf.NewAccServerClient(conn)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
@@ -77,7 +79,9 @@ func GetUserList(server *models.Server, appId uint32) (userIds []string, err err
 
 		return
 	}
-	defer conn.Close()
+	defer func(conn *grpc.ClientConn) {
+		_ = conn.Close()
+	}(conn)
 
 	c := protobuf.NewAccServerClient(conn)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
@@ -118,7 +122,9 @@ func SendMsg(server *models.Server, seq string, appId uint32, userId string, cmd
 
 		return
 	}
-	defer conn.Close()
+	defer func(conn *grpc.ClientConn) {
+		_ = conn.Close()
+	}(conn)
 
 	c := protobuf.NewAccServerClient(conn)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)

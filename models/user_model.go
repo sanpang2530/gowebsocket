@@ -76,7 +76,6 @@ func (u *UserOnline) LogOut() {
 // IsOnline 用户是否在线
 func (u *UserOnline) IsOnline() (online bool) {
 	if u.IsLogoff {
-
 		return
 	}
 
@@ -84,13 +83,11 @@ func (u *UserOnline) IsOnline() (online bool) {
 
 	if u.HeartbeatTime < (currentTime - heartbeatTimeout) {
 		fmt.Println("用户是否在线 心跳超时", u.AppId, u.UserId, u.HeartbeatTime)
-
 		return
 	}
 
 	if u.IsLogoff {
 		fmt.Println("用户是否在线 用户已经下线", u.AppId, u.UserId)
-
 		return
 	}
 
@@ -102,7 +99,6 @@ func (u *UserOnline) UserIsLocal(localIp, localPort string) (result bool) {
 
 	if u.AccIp == localIp && u.AccPort == localPort {
 		result = true
-
 		return
 	}
 
