@@ -14,7 +14,7 @@ import (
 
 	"github.com/link1st/gowebsocket/lib/cache"
 	"github.com/link1st/gowebsocket/models"
-	"github.com/link1st/gowebsocket/servers/grpcclient"
+	"github.com/link1st/gowebsocket/servers/grpc_client"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -38,7 +38,7 @@ func UserList(appId uint32) (userList []string) {
 		if IsLocal(server) {
 			list = GetUserList(appId)
 		} else {
-			list, _ = grpcclient.GetUserList(server, appId)
+			list, _ = grpc_client.GetUserList(server, appId)
 		}
 		userList = append(userList, list...)
 	}
@@ -113,7 +113,7 @@ func SendUserMessage(appId uint32, userId string, msgId, message string) (sendRe
 		return false, nil
 	}
 	server := models.NewServer(info.AccIp, info.AccPort)
-	msg, err := grpcclient.SendMsg(server, msgId, appId, userId, models.MessageCmdMsg, models.MessageCmdMsg, message)
+	msg, err := grpc_client.SendMsg(server, msgId, appId, userId, models.MessageCmdMsg, models.MessageCmdMsg, message)
 	if err != nil {
 		fmt.Println("给用户发送消息失败", key, err)
 
@@ -159,7 +159,7 @@ func SendUserMessageAll(appId uint32, userId string, msgId, cmd, message string)
 			data := models.GetMsgData(userId, msgId, cmd, message)
 			AllSendMessages(appId, userId, data)
 		} else {
-			_, _ = grpcclient.SendMsgAll(server, msgId, appId, userId, cmd, message)
+			_, _ = grpc_client.SendMsgAll(server, msgId, appId, userId, cmd, message)
 		}
 	}
 

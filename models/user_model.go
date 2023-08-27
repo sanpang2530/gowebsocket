@@ -26,7 +26,7 @@ type UserOnline struct {
 	ClientPort    string `json:"clientPort"`    // 客户端端口
 	LoginTime     uint64 `json:"loginTime"`     // 用户上次登录时间
 	HeartbeatTime uint64 `json:"heartbeatTime"` // 用户上次心跳时间
-	LogOutTime    uint64 `json:"logOutTime"`    // 用户退出登录的时间
+	LogOutTime    uint64 `json:"logout_time"`   // 用户退出登录的时间
 	Qua           string `json:"qua"`           // qua
 	DeviceInfo    string `json:"deviceInfo"`    // 设备信息
 	IsLogoff      bool   `json:"isLogoff"`      // 是否下线
@@ -54,10 +54,8 @@ func UserLogin(accIp, accPort string, appId uint32, userId string, addr string,
 
 // Heartbeat 用户心跳
 func (u *UserOnline) Heartbeat(currentTime uint64) {
-
 	u.HeartbeatTime = currentTime
 	u.IsLogoff = false
-
 	return
 }
 
@@ -78,29 +76,23 @@ func (u *UserOnline) IsOnline() (online bool) {
 	if u.IsLogoff {
 		return
 	}
-
 	currentTime := uint64(time.Now().Unix())
-
 	if u.HeartbeatTime < (currentTime - heartbeatTimeout) {
 		fmt.Println("用户是否在线 心跳超时", u.AppId, u.UserId, u.HeartbeatTime)
 		return
 	}
-
 	if u.IsLogoff {
 		fmt.Println("用户是否在线 用户已经下线", u.AppId, u.UserId)
 		return
 	}
-
 	return true
 }
 
 // UserIsLocal 用户是否在本台机器上
 func (u *UserOnline) UserIsLocal(localIp, localPort string) (result bool) {
-
 	if u.AccIp == localIp && u.AccPort == localPort {
 		result = true
 		return
 	}
-
 	return
 }

@@ -11,13 +11,12 @@ import "github.com/link1st/gowebsocket/common"
 
 const (
 	MessageTypeText = "text"
-
 	MessageCmdMsg   = "msg"
 	MessageCmdEnter = "enter"
 	MessageCmdExit  = "exit"
 )
 
-// 消息的定义
+// Message 消息的定义
 type Message struct {
 	Target string `json:"target"` // 目标
 	Type   string `json:"type"`   // 消息类型 text/img/

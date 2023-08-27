@@ -18,12 +18,12 @@ type Request struct {
 
 // Login 登录请求数据
 type Login struct {
-	ServiceToken string `json:"serviceToken"` // 验证用户是否登录
-	AppId        uint32 `json:"appId,omitempty"`
-	UserId       string `json:"userId,omitempty"`
+	Token  string `json:"token"` // 验证用户是否登录
+	AppId  uint32 `json:"app_id,omitempty"`
+	UserId string `json:"user_id,omitempty"`
 }
 
 // HeartBeat 心跳请求数据
 type HeartBeat struct {
-	UserId string `json:"userId,omitempty"`
+	UserId string `json:"user_id,omitempty"`
 }

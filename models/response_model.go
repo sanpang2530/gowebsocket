@@ -41,7 +41,6 @@ func NewResponseHead(seq string, cmd string, code uint32, codeMsg string, data i
 func (h *Head) String() (headStr string) {
 	headBytes, _ := json.Marshal(h)
 	headStr = string(headBytes)
-
 	return
 }
 

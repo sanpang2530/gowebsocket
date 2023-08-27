@@ -29,7 +29,7 @@ func getServersHashKey() (key string) {
 	return
 }
 
-// 设置服务器信息
+// SetServerInfo 设置服务器信息
 func SetServerInfo(server *models.Server, currentTime uint64) (err error) {
 	key := getServersHashKey()
 	value := fmt.Sprintf("%d", currentTime)
@@ -43,7 +43,7 @@ func SetServerInfo(server *models.Server, currentTime uint64) (err error) {
 	return
 }
 
-// 下线服务器信息
+// DelServerInfo 下线服务器信息
 func DelServerInfo(server *models.Server) (err error) {
 	key := getServersHashKey()
 	redisClient := redislib.GetClient()
@@ -65,21 +65,18 @@ func DelServerInfo(server *models.Server) (err error) {
 }
 
 func GetServerAll(currentTime uint64) (servers []*models.Server, err error) {
-
 	servers = make([]*models.Server, 0)
 	key := getServersHashKey()
-
 	redisClient := redislib.GetClient()
-
 	val, err := redisClient.Do(context.Background(), "hGetAll", key).Result()
-
 	valByte, _ := json.Marshal(val)
-	fmt.Println("GetServerAll", key, string(valByte))
 
+	fmt.Println("GetServerAll", key, string(valByte))
 	serverMap, err := redisClient.HGetAll(context.Background(), key).Result()
+
+	//
 	if err != nil {
 		fmt.Println("SetServerInfo", key, err)
-
 		return
 	}
 
@@ -90,19 +87,16 @@ func GetServerAll(currentTime uint64) (servers []*models.Server, err error) {
 
 			return nil, err
 		}
-
 		// 超时
 		if valueUint64+serversHashTimeout <= currentTime {
 			continue
 		}
-
 		server, err := models.StringToServer(key)
 		if err != nil {
 			fmt.Println("GetServerAll", key, err)
 
 			return nil, err
 		}
-
 		servers = append(servers, server)
 	}
 

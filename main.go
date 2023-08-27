@@ -18,7 +18,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/link1st/gowebsocket/lib/redislib"
 	"github.com/link1st/gowebsocket/routers"
-	"github.com/link1st/gowebsocket/servers/grpcserver"
+	"github.com/link1st/gowebsocket/servers/grpc_server"
 	"github.com/link1st/gowebsocket/servers/task"
 	"github.com/link1st/gowebsocket/servers/websocket"
 	"github.com/spf13/viper"
@@ -45,7 +45,7 @@ func main() {
 	go websocket.StartWebSocket()
 
 	// grpc
-	go grpcserver.Init()
+	go grpc_server.Init()
 
 	// go open()
 

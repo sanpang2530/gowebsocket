@@ -5,7 +5,7 @@
 * Time: 16:43
  */
 
-package grpcclient
+package grpc_client
 
 import (
 	"context"

@@ -35,7 +35,6 @@ func StringToServer(str string) (server *Server, err error) {
 	if len(list) != 2 {
 		return nil, errors.New("err")
 	}
-
 	server = &Server{
 		Ip:   list[0],
 		Port: list[1],
