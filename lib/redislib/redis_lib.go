@@ -19,7 +19,7 @@ var (
 	client *redis.Client
 )
 
-func ExampleNewClient() {
+func NewClient() {
 
 	client = redis.NewClient(&redis.Options{
 		Addr:         viper.GetString("redis.addr"),
@@ -35,6 +35,5 @@ func ExampleNewClient() {
 }
 
 func GetClient() (c *redis.Client) {
-
 	return client
 }

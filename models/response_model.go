@@ -10,6 +10,7 @@ package models
 import "encoding/json"
 
 /************************  响应数据  **************************/
+
 type Head struct {
 	Seq      string    `json:"seq"`      // 消息的Id
 	Cmd      string    `json:"cmd"`      // 消息的cmd 动作
@@ -22,7 +23,7 @@ type Response struct {
 	Data    interface{} `json:"data"` // 数据 json
 }
 
-// push 数据结构体
+// PushMsg push 数据结构体
 type PushMsg struct {
 	Seq  string `json:"seq"`
 	Uuid uint64 `json:"uuid"`
@@ -30,7 +31,7 @@ type PushMsg struct {
 	Msg  string `json:"msg"`
 }
 
-// 设置返回消息
+// NewResponseHead 设置返回消息
 func NewResponseHead(seq string, cmd string, code uint32, codeMsg string, data interface{}) *Head {
 	response := NewResponse(code, codeMsg, data)
 

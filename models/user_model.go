@@ -16,7 +16,7 @@ const (
 	heartbeatTimeout = 3 * 60 // 用户心跳超时时间
 )
 
-// 用户在线状态
+// UserOnline 用户在线状态
 type UserOnline struct {
 	AccIp         string `json:"accIp"`         // acc Ip
 	AccPort       string `json:"accPort"`       // acc 端口
@@ -34,7 +34,7 @@ type UserOnline struct {
 
 /**********************  数据处理  *********************************/
 
-// 用户登录
+// UserLogin 用户登录
 func UserLogin(accIp, accPort string, appId uint32, userId string, addr string,
 	loginTime uint64) (userOnline *UserOnline) {
 
@@ -52,7 +52,7 @@ func UserLogin(accIp, accPort string, appId uint32, userId string, addr string,
 	return
 }
 
-// 用户心跳
+// Heartbeat 用户心跳
 func (u *UserOnline) Heartbeat(currentTime uint64) {
 
 	u.HeartbeatTime = currentTime
@@ -61,7 +61,7 @@ func (u *UserOnline) Heartbeat(currentTime uint64) {
 	return
 }
 
-// 用户退出登录
+// LogOut 用户退出登录
 func (u *UserOnline) LogOut() {
 
 	currentTime := uint64(time.Now().Unix())
@@ -73,7 +73,7 @@ func (u *UserOnline) LogOut() {
 
 /**********************  数据操作  *********************************/
 
-// 用户是否在线
+// IsOnline 用户是否在线
 func (u *UserOnline) IsOnline() (online bool) {
 	if u.IsLogoff {
 
@@ -97,7 +97,7 @@ func (u *UserOnline) IsOnline() (online bool) {
 	return true
 }
 
-// 用户是否在本台机器上
+// UserIsLocal 用户是否在本台机器上
 func (u *UserOnline) UserIsLocal(localIp, localPort string) (result bool) {
 
 	if u.AccIp == localIp && u.AccPort == localPort {

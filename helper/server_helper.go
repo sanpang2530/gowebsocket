@@ -24,18 +24,18 @@ func GetServerIp() string {
 }
 
 func externalIP() (net.IP, error) {
-	ifaces, err := net.Interfaces()
+	iFaces, err := net.Interfaces()
 	if err != nil {
 		return nil, err
 	}
-	for _, iface := range ifaces {
-		if iface.Flags&net.FlagUp == 0 {
+	for _, iFace := range iFaces {
+		if iFace.Flags&net.FlagUp == 0 {
 			continue // interface down
 		}
-		if iface.Flags&net.FlagLoopback != 0 {
-			continue // loopback interface
+		if iFace.Flags&net.FlagLoopback != 0 {
+			continue // loop back interface
 		}
-		addrs, err := iface.Addrs()
+		addrs, err := iFace.Addrs()
 		if err != nil {
 			return nil, err
 		}

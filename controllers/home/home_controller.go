@@ -17,7 +17,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-// 聊天页面
+// Index 聊天页面
 func Index(c *gin.Context) {
 
 	appIdStr := c.Query("appId")

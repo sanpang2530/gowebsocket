@@ -49,7 +49,7 @@ func setErr(rsp proto.Message, code uint32, message string) {
 
 }
 
-// 查询用户是否在线
+// QueryUsersOnline 查询用户是否在线
 func (s *server) QueryUsersOnline(c context.Context,
 	req *protobuf.QueryUsersOnlineReq) (rsp *protobuf.QueryUsersOnlineRsp, err error) {
 
@@ -65,7 +65,7 @@ func (s *server) QueryUsersOnline(c context.Context,
 	return rsp, nil
 }
 
-// 给本机用户发消息
+// SendMsg 给本机用户发消息
 func (s *server) SendMsg(c context.Context, req *protobuf.SendMsgReq) (rsp *protobuf.SendMsgRsp, err error) {
 
 	fmt.Println("grpc_request 给本机用户发消息", req.String())
@@ -102,7 +102,7 @@ func (s *server) SendMsg(c context.Context, req *protobuf.SendMsgReq) (rsp *prot
 	return
 }
 
-// 给本机全体用户发消息
+// SendMsgAll 给本机全体用户发消息
 func (s *server) SendMsgAll(c context.Context, req *protobuf.SendMsgAllReq) (rsp *protobuf.SendMsgAllRsp, err error) {
 
 	fmt.Println("grpc_request 给本机全体用户发消息", req.String())
@@ -119,7 +119,7 @@ func (s *server) SendMsgAll(c context.Context, req *protobuf.SendMsgAllReq) (rsp
 	return
 }
 
-// 获取本机用户列表
+// GetUserList 获取本机用户列表
 func (s *server) GetUserList(c context.Context, req *protobuf.GetUserListReq) (rsp *protobuf.GetUserListRsp,
 	err error) {
 
@@ -139,7 +139,7 @@ func (s *server) GetUserList(c context.Context, req *protobuf.GetUserListReq) (r
 	return
 }
 
-// rpc server
+// Init rpc server
 // link::https://github.com/grpc/grpc-go/blob/master/examples/helloworld/greeter_server/main.go
 func Init() {
 

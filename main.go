@@ -43,14 +43,14 @@ func main() {
 	task.ServerInit()
 
 	go websocket.StartWebSocket()
+
 	// grpc
 	go grpcserver.Init()
 
-	go open()
+	// go open()
 
 	httpPort := viper.GetString("app.httpPort")
-	http.ListenAndServe(":"+httpPort, router)
-
+	_ = http.ListenAndServe(":"+httpPort, router)
 }
 
 // 初始化日志
@@ -75,11 +75,10 @@ func initConfig() {
 
 	fmt.Println("config app:", viper.Get("app"))
 	fmt.Println("config redis:", viper.Get("redis"))
-
 }
 
 func initRedis() {
-	redislib.ExampleNewClient()
+	redislib.NewClient()
 }
 
 func open() {
@@ -92,5 +91,5 @@ func open() {
 	fmt.Println("访问页面体验:", httpUrl)
 
 	cmd := exec.Command("open", httpUrl)
-	cmd.Output()
+	_, _ = cmd.Output()
 }

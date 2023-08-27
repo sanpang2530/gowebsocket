@@ -21,7 +21,7 @@ import (
 	"github.com/link1st/gowebsocket/protobuf"
 )
 
-// rpc client
+// SendMsgAll rpc client
 // 给全体用户发送消息
 // link::https://github.com/grpc/grpc-go/blob/master/examples/helloworld/greeter_client/main.go
 func SendMsgAll(server *models.Server, seq string, appId uint32, userId string, cmd string,
@@ -66,7 +66,7 @@ func SendMsgAll(server *models.Server, seq string, appId uint32, userId string, 
 	return
 }
 
-// 获取用户列表
+// GetUserList 获取用户列表
 // link::https://github.com/grpc/grpc-go/blob/master/examples/helloworld/greeter_client/main.go
 func GetUserList(server *models.Server, appId uint32) (userIds []string, err error) {
 	userIds = make([]string, 0)
@@ -106,7 +106,7 @@ func GetUserList(server *models.Server, appId uint32) (userIds []string, err err
 	return
 }
 
-// rpc client
+// SendMsg rpc client
 // 发送消息
 // link::https://github.com/grpc/grpc-go/blob/master/examples/helloworld/greeter_client/main.go
 func SendMsg(server *models.Server, seq string, appId uint32, userId string, cmd string, msgType string,

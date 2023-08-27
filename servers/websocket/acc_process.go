@@ -23,7 +23,7 @@ var (
 	handlersRWMutex sync.RWMutex
 )
 
-// 注册
+// Register 注册
 func Register(key string, value DisposeFunc) {
 	handlersRWMutex.Lock()
 	defer handlersRWMutex.Unlock()
@@ -41,7 +41,7 @@ func getHandlers(key string) (value DisposeFunc, ok bool) {
 	return
 }
 
-// 处理数据
+// ProcessData 处理数据
 func ProcessData(client *Client, message []byte) {
 
 	fmt.Println("处理数据", client.Addr, string(message))

@@ -17,7 +17,7 @@ import (
 	"github.com/link1st/gowebsocket/models"
 )
 
-// 连接管理
+// ClientManager 连接管理
 type ClientManager struct {
 	Clients     map[*Client]bool   // 全部的连接
 	ClientsLock sync.RWMutex       // 读写锁
@@ -42,7 +42,7 @@ func NewClientManager() (clientManager *ClientManager) {
 	return
 }
 
-// 获取用户key
+// GetUserKey 获取用户key
 func GetUserKey(appId uint32, userId string) (key string) {
 	key = fmt.Sprintf("%d_%s", appId, userId)
 
@@ -61,7 +61,6 @@ func (manager *ClientManager) InClient(client *Client) (ok bool) {
 	return
 }
 
-// GetClients
 func (manager *ClientManager) GetClients() (clients map[*Client]bool) {
 
 	clients = make(map[*Client]bool)
@@ -75,7 +74,7 @@ func (manager *ClientManager) GetClients() (clients map[*Client]bool) {
 	return
 }
 
-// 遍历
+// ClientsRange 遍历
 func (manager *ClientManager) ClientsRange(f func(client *Client, value bool) (result bool)) {
 
 	manager.ClientsLock.RLock()
@@ -91,7 +90,6 @@ func (manager *ClientManager) ClientsRange(f func(client *Client, value bool) (r
 	return
 }
 
-// GetClientsLen
 func (manager *ClientManager) GetClientsLen() (clientsLen int) {
 
 	clientsLen = len(manager.Clients)
@@ -99,7 +97,7 @@ func (manager *ClientManager) GetClientsLen() (clientsLen int) {
 	return
 }
 
-// 添加客户端
+// AddClients 添加客户端
 func (manager *ClientManager) AddClients(client *Client) {
 	manager.ClientsLock.Lock()
 	defer manager.ClientsLock.Unlock()
@@ -107,7 +105,7 @@ func (manager *ClientManager) AddClients(client *Client) {
 	manager.Clients[client] = true
 }
 
-// 删除客户端
+// DelClients 删除客户端
 func (manager *ClientManager) DelClients(client *Client) {
 	manager.ClientsLock.Lock()
 	defer manager.ClientsLock.Unlock()
@@ -117,7 +115,7 @@ func (manager *ClientManager) DelClients(client *Client) {
 	}
 }
 
-// 获取用户的连接
+// GetUserClient 获取用户的连接
 func (manager *ClientManager) GetUserClient(appId uint32, userId string) (client *Client) {
 
 	manager.UserLock.RLock()
@@ -131,14 +129,14 @@ func (manager *ClientManager) GetUserClient(appId uint32, userId string) (client
 	return
 }
 
-// GetClientsLen
+// GetUsersLen GetClientsLen
 func (manager *ClientManager) GetUsersLen() (userLen int) {
 	userLen = len(manager.Users)
 
 	return
 }
 
-// 添加用户
+// AddUsers 添加用户
 func (manager *ClientManager) AddUsers(key string, client *Client) {
 	manager.UserLock.Lock()
 	defer manager.UserLock.Unlock()
@@ -146,7 +144,7 @@ func (manager *ClientManager) AddUsers(key string, client *Client) {
 	manager.Users[key] = client
 }
 
-// 删除用户
+// DelUsers 删除用户
 func (manager *ClientManager) DelUsers(client *Client) (result bool) {
 	manager.UserLock.Lock()
 	defer manager.UserLock.Unlock()
@@ -165,7 +163,7 @@ func (manager *ClientManager) DelUsers(client *Client) (result bool) {
 	return
 }
 
-// 获取用户的key
+// GetUserKeys 获取用户的key
 func (manager *ClientManager) GetUserKeys() (userKeys []string) {
 
 	userKeys = make([]string, 0)
@@ -178,7 +176,7 @@ func (manager *ClientManager) GetUserKeys() (userKeys []string) {
 	return
 }
 
-// 获取用户的key
+// GetUserList 获取用户的key
 func (manager *ClientManager) GetUserList(appId uint32) (userList []string) {
 
 	userList = make([]string, 0)
@@ -197,7 +195,7 @@ func (manager *ClientManager) GetUserList(appId uint32) (userList []string) {
 	return
 }
 
-// 获取用户的key
+// GetUserClients 获取用户的key
 func (manager *ClientManager) GetUserClients() (clients []*Client) {
 
 	clients = make([]*Client, 0)
@@ -232,7 +230,7 @@ func (manager *ClientManager) sendAppIdAll(message []byte, appId uint32, ignoreC
 	}
 }
 
-// 用户建立连接事件
+// EventRegister 用户建立连接事件
 func (manager *ClientManager) EventRegister(client *Client) {
 	manager.AddClients(client)
 
@@ -241,7 +239,7 @@ func (manager *ClientManager) EventRegister(client *Client) {
 	// client.Send <- []byte("连接成功")
 }
 
-// 用户登录
+// EventLogin 用户登录
 func (manager *ClientManager) EventLogin(login *login) {
 
 	client := login.Client
@@ -254,10 +252,10 @@ func (manager *ClientManager) EventLogin(login *login) {
 	fmt.Println("EventLogin 用户登录", client.Addr, login.AppId, login.UserId)
 
 	orderId := helper.GetOrderIdTime()
-	SendUserMessageAll(login.AppId, login.UserId, orderId, models.MessageCmdEnter, "哈喽~")
+	_, _ = SendUserMessageAll(login.AppId, login.UserId, orderId, models.MessageCmdEnter, "哈喽~")
 }
 
-// 用户断开连接
+// EventUnregister 用户断开连接
 func (manager *ClientManager) EventUnregister(client *Client) {
 	manager.DelClients(client)
 
@@ -273,7 +271,7 @@ func (manager *ClientManager) EventUnregister(client *Client) {
 	userOnline, err := cache.GetUserOnlineInfo(client.GetKey())
 	if err == nil {
 		userOnline.LogOut()
-		cache.SetUserOnlineInfo(client.GetKey(), userOnline)
+		_ = cache.SetUserOnlineInfo(client.GetKey(), userOnline)
 	}
 
 	// 关闭 chan
@@ -283,7 +281,7 @@ func (manager *ClientManager) EventUnregister(client *Client) {
 
 	if client.UserId != "" {
 		orderId := helper.GetOrderIdTime()
-		SendUserMessageAll(client.AppId, client.UserId, orderId, models.MessageCmdExit, "用户已经离开~")
+		_, _ = SendUserMessageAll(client.AppId, client.UserId, orderId, models.MessageCmdExit, "用户已经离开~")
 	}
 }
 
@@ -318,7 +316,8 @@ func (manager *ClientManager) start() {
 }
 
 /**************************  manager info  ***************************************/
-// 获取管理者信息
+
+// GetManagerInfo 获取管理者信息
 func GetManagerInfo(isDebug string) (managerInfo map[string]interface{}) {
 	managerInfo = make(map[string]interface{})
 
@@ -346,14 +345,14 @@ func GetManagerInfo(isDebug string) (managerInfo map[string]interface{}) {
 	return
 }
 
-// 获取用户所在的连接
+// GetUserClient 获取用户所在的连接
 func GetUserClient(appId uint32, userId string) (client *Client) {
 	client = clientManager.GetUserClient(appId, userId)
 
 	return
 }
 
-// 定时清理超时连接
+// ClearTimeoutConnections 定时清理超时连接
 func ClearTimeoutConnections() {
 	currentTime := uint64(time.Now().Unix())
 
@@ -362,12 +361,12 @@ func ClearTimeoutConnections() {
 		if client.IsHeartbeatTimeout(currentTime) {
 			fmt.Println("心跳时间超时 关闭连接", client.Addr, client.UserId, client.LoginTime, client.HeartbeatTime)
 
-			client.Socket.Close()
+			_ = client.Socket.Close()
 		}
 	}
 }
 
-// 获取全部用户
+// GetUserList 获取全部用户
 func GetUserList(appId uint32) (userList []string) {
 	fmt.Println("获取全部用户", appId)
 
@@ -376,7 +375,7 @@ func GetUserList(appId uint32) (userList []string) {
 	return
 }
 
-// 全员广播
+// AllSendMessages 全员广播
 func AllSendMessages(appId uint32, userId string, data string) {
 	fmt.Println("全员广播", appId, userId, data)
 

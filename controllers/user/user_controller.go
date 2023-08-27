@@ -19,7 +19,7 @@ import (
 	"github.com/link1st/gowebsocket/servers/websocket"
 )
 
-// 查看全部在线用户
+// List 查看全部在线用户
 func List(c *gin.Context) {
 
 	appIdStr := c.Query("appId")
@@ -37,7 +37,7 @@ func List(c *gin.Context) {
 	controllers.Response(c, common.OK, "", data)
 }
 
-// 查看用户是否在线
+// Online 查看用户是否在线
 func Online(c *gin.Context) {
 
 	userId := c.Query("userId")
@@ -56,7 +56,7 @@ func Online(c *gin.Context) {
 	controllers.Response(c, common.OK, "", data)
 }
 
-// 给用户发送消息
+// SendMessage 给用户发送消息
 func SendMessage(c *gin.Context) {
 	// 获取参数
 	appIdStr := c.PostForm("appId")
@@ -90,7 +90,7 @@ func SendMessage(c *gin.Context) {
 	controllers.Response(c, common.OK, "", data)
 }
 
-// 给全员发送消息
+// SendMessageAll 给全员发送消息
 func SendMessageAll(c *gin.Context) {
 	// 获取参数
 	appIdStr := c.PostForm("appId")

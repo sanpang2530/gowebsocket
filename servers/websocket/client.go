@@ -33,7 +33,7 @@ func (l *login) GetKey() (key string) {
 	return
 }
 
-// 用户连接
+// Client 用户连接
 type Client struct {
 	Addr          string          // 客户端地址
 	Socket        *websocket.Conn // 用户连接
@@ -45,7 +45,7 @@ type Client struct {
 	LoginTime     uint64          // 登录时间 登录以后才有
 }
 
-// 初始化
+// NewClient 初始化
 func NewClient(addr string, socket *websocket.Conn, firstTime uint64) (client *Client) {
 	client = &Client{
 		Addr:          addr,
@@ -103,7 +103,7 @@ func (c *Client) write() {
 
 	defer func() {
 		clientManager.Unregister <- c
-		c.Socket.Close()
+		_ = c.Socket.Close()
 		fmt.Println("Client发送数据 defer", c)
 	}()
 
@@ -117,7 +117,7 @@ func (c *Client) write() {
 				return
 			}
 
-			c.Socket.WriteMessage(websocket.TextMessage, message)
+			_ = c.Socket.WriteMessage(websocket.TextMessage, message)
 		}
 	}
 }

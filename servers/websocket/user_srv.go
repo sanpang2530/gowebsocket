@@ -19,7 +19,7 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-// 查询所有用户
+// UserList 查询所有用户
 func UserList(appId uint32) (userList []string) {
 
 	userList = make([]string, 0)
@@ -46,7 +46,7 @@ func UserList(appId uint32) (userList []string) {
 	return
 }
 
-// 查询用户是否在线
+// CheckUserOnline 查询用户是否在线
 func CheckUserOnline(appId uint32, userId string) (online bool) {
 	// 全平台查询
 	if appId == 0 {
@@ -84,7 +84,7 @@ func checkUserOnline(appId uint32, userId string) (online bool, err error) {
 	return
 }
 
-// 给用户发送消息
+// SendUserMessage 给用户发送消息
 func SendUserMessage(appId uint32, userId string, msgId, message string) (sendResults bool, err error) {
 
 	data := models.GetTextMsgData(userId, msgId, message)
@@ -125,7 +125,7 @@ func SendUserMessage(appId uint32, userId string, msgId, message string) (sendRe
 	return
 }
 
-// 给本机用户发送消息
+// SendUserMessageLocal 给本机用户发送消息
 func SendUserMessageLocal(appId uint32, userId string, data string) (sendResults bool, err error) {
 
 	client := GetUserClient(appId, userId)
@@ -142,7 +142,7 @@ func SendUserMessageLocal(appId uint32, userId string, data string) (sendResults
 	return
 }
 
-// 给全体用户发消息
+// SendUserMessageAll 给全体用户发消息
 func SendUserMessageAll(appId uint32, userId string, msgId, cmd, message string) (sendResults bool, err error) {
 	sendResults = true
 
@@ -159,7 +159,7 @@ func SendUserMessageAll(appId uint32, userId string, msgId, cmd, message string)
 			data := models.GetMsgData(userId, msgId, cmd, message)
 			AllSendMessages(appId, userId, data)
 		} else {
-			grpcclient.SendMsgAll(server, msgId, appId, userId, cmd, message)
+			_, _ = grpcclient.SendMsgAll(server, msgId, appId, userId, cmd, message)
 		}
 	}
 

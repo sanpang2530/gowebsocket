@@ -17,7 +17,7 @@ import (
 	"github.com/link1st/gowebsocket/servers/websocket"
 )
 
-// 查询系统状态
+// Status 查询系统状态
 func Status(c *gin.Context) {
 
 	isDebug := c.Query("isDebug")
