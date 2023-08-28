@@ -83,7 +83,7 @@ func (c *accServerClient) GetUserList(ctx context.Context, in *GetUserListReq, o
 	return out, nil
 }
 
-// AccServerServer is the server API for AccServer service.
+// AccServerServer is the system API for AccServer service.
 // All implementations must embed UnimplementedAccServerServer
 // for forward compatibility
 type AccServerServer interface {

@@ -7,6 +7,8 @@
 
 package common
 
+import "github.com/youthlin/t"
+
 const (
 	OK                 = 200  // Success
 	NotLoggedIn        = 1000 // 未登录
@@ -26,7 +28,7 @@ const (
 func GetErrorMessage(code uint32, message string) string {
 	var codeMessage string
 	codeMap := map[uint32]string{
-		OK:                 "Success",
+		OK:                 t.T("成功"),
 		NotLoggedIn:        "未登录",
 		ParameterIllegal:   "参数不合法",
 		UnauthorizedUserId: "非法的用户Id",
@@ -45,7 +47,7 @@ func GetErrorMessage(code uint32, message string) string {
 			// 存在
 			codeMessage = value
 		} else {
-			codeMessage = "未定义错误类型!"
+			codeMessage = t.T("未定义错误类型!")
 		}
 	} else {
 		codeMessage = message

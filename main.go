@@ -9,6 +9,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/link1st/gowebsocket/mod/conn"
+	"github.com/link1st/gowebsocket/mod/conn/grpc_server"
+	"github.com/link1st/gowebsocket/mod/system"
 	"io"
 	"net/http"
 	"os"
@@ -16,14 +19,12 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/link1st/gowebsocket/lib/redislib"
+	"github.com/link1st/gowebsocket/libs/redis_lib"
 	"github.com/link1st/gowebsocket/routers"
-	"github.com/link1st/gowebsocket/servers/grpc_server"
-	"github.com/link1st/gowebsocket/servers/task"
-	"github.com/link1st/gowebsocket/servers/websocket"
 	"github.com/spf13/viper"
 )
 
+// 入口
 func main() {
 	initConfig()
 
@@ -37,12 +38,12 @@ func main() {
 	routers.WebsocketInit()
 
 	// 定时任务
-	task.Init()
+	conn.Init()
 
 	// 服务注册
-	task.ServerInit()
+	system.ServerInit()
 
-	go websocket.StartWebSocket()
+	go conn.StartWebSocket()
 
 	// grpc
 	go grpc_server.Init()
@@ -64,6 +65,7 @@ func initFile() {
 	gin.DefaultWriter = io.MultiWriter(f)
 }
 
+// 初始化Config
 func initConfig() {
 	viper.SetConfigName("config/app")
 	viper.AddConfigPath(".") // 添加搜索路径
@@ -77,10 +79,12 @@ func initConfig() {
 	fmt.Println("config redis:", viper.Get("redis"))
 }
 
+// 初始化Redis
 func initRedis() {
-	redislib.NewClient()
+	redis_lib.NewClient()
 }
 
+// 打开页面
 func open() {
 
 	time.Sleep(1000 * time.Millisecond)
